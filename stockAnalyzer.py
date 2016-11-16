@@ -1,4 +1,5 @@
 from yahoo_finance import Share
+from scipy import stats
 import datetime
 
 def growthProbability(stockName):
@@ -13,19 +14,25 @@ def growthProbability(stockName):
     ShortRatio = stock.get_short_ratio()
     weightShort = 0.1
 
+    historical = getFiveDaySlope(stockName)
     weightHistorical = 0.6
 
-def getFiveDayHistory(stock):
-    historicalDataGraph = []
+def getFiveDaySlope(stockName):
+    # Initialize values.
+    stock = Share(stockName)
+    x = []
+    y = []
     # Get a range of dates.
     endDate = datetime.datetime.now().strftime("%Y-%m-%d")
-    dateDelta = datetime.timedelta(days = 8)
-    startDate = (datetime.datetime.now() - dateDelta).strftime("%Y-%m-%d")
+    startDate = (datetime.datetime.now() - datetime.timedelta(days = 8)).strftime("%Y-%m-%d")
     # Get only the last 5 business days.
     historicalData = stock.get_historical(startDate, endDate)
     historicalData = historicalData[0:5]
-
+    # Create a graph where the x axis is 0 - 9 and the y axis is open and close prices
     for i in range(5):
-        # Create a graph where the x axis is 0 - 9 and the y axis is open and close prices
-        historicalDataGraph += {2 * i, historicalData[i]['Open']}
-        historicalDataGraph += {2 * i + 1, historicalData[i]['Close']}
+        x += [2 * i, 2 * i + 1]
+        y += [float(historicalData[i]['Open']), float(historicalData[i]['Close'])]
+    print x
+    print y
+    slope, intercept, r_value, p_value, std_err = stats.linregress(x,y)
+    return slope
