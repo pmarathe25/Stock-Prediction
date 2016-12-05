@@ -5,7 +5,12 @@ import BaseHTTPServer
 import SocketServer
 import json
 import urlparse
+import urllib
 import requests
+import stockAnalyzer
+import re
+from datetime import datetime
+from datetime import timedelta
 
 class S(SimpleHTTPRequestHandler):
     def end_headers(self):
@@ -20,21 +25,49 @@ class S(SimpleHTTPRequestHandler):
         self._set_headers()
         parsed_path = urlparse.urlparse(self.path)
         print parsed_path
-        requested_term = parsed_path.query
-        response = self.getTimeseriesData(requested_term)
-        self.wfile.write(response)
+        request = json.loads(urllib.unquote(parsed_path.query))
+        requested_term = request['term']
+        response = {'trend': predictTrend(requested_term)}
+        self.wfile.write(json.dumps(response))
 
     def do_HEAD(self):
         self._set_headers()
 
-    def getTimeseriesData(self, term):
-        r = requests.get('https://www.google.com/trends/fetchComponent?hl=en-US&q=' + term + '&cid=TIMESERIES_GRAPH_0&export=3&w=500&h=300')
-        stripped = r.content[r.content.index('{') : r.content.rindex('}')]
-        return stripped
+def predictTrend(term):
+    growthProb = stockAnalyzer.growthProbability(term)
+    print 'growthProb: %f' % growthProb
+    volatility = searchTrend(term)
+    print 'volatility: %f' % volatility
+    trend = growthProb * volatility
+    return trend
 
-    def getGeoData(self, term):
-        r = requests.get('https://www.google.com/trends/api/widgetdata/comparedgeo/csv?req=%7B%22geo%22%3A%7B%7D%2C%22comparisonItem%22%3A%5B%7B%22time%22%3A%222011-12-03%202016-12-03%22%2C%22complexKeywordsRestriction%22%3A%7B%22keyword%22%3A%5B%7B%22type%22%3A%22BROAD%22%2C%22value%22%3A%22' + term + '%22%7D%5D%7D%7D%5D%2C%22resolution%22%3A%22COUNTRY%22%2C%22locale%22%3A%22en-US%22%2C%22requestOptions%22%3A%7B%22property%22%3A%22%22%2C%22backend%22%3A%22IZG%22%2C%22category%22%3A0%7D%7D&token=APP6_UEAAAAAWESAvd4dZTl8n9BzAouebeW12mzknd18&tz=300')
-        return r.content
+def searchTrend(term):
+    searchData = getTimeseriesData(term)
+    today = datetime.today()
+    lastDayTrend = 0
+    delta = timedelta(hours=24)
+    pastTotal = 0
+    for val in searchData['table']['rows'][::-1]:
+        if 'v' in val['c'][1]:
+            continue
+        date = datetime.strptime(val['c'][0]['f'][:-4], '%b %d, %Y, %H:%M')
+        if date + delta < today:
+            pastTotal += int(val['c'][1]['f'])
+        else:
+            lastDayTrend += int(val['c'][1]['f'])
+    lastDayTrend = float(lastDayTrend) / 24
+    avg = float(pastTotal) / (len(searchData['table']['rows']) - 24)
+    return  lastDayTrend / avg
+
+def getTimeseriesData(term):
+    r = requests.get('https://www.google.com/trends/fetchComponent?hl=en-US&q=' + term + '&cid=TIMESERIES_GRAPH_0&export=3&date=now%207-d')
+    stripped = r.content[r.content.index('{') : r.content.rindex('}')]
+    replaced = json.loads(re.sub(r'"v"([^"]|\\")*"f"', '"f"', stripped) + '}')
+    return replaced
+
+def getGeoData(term):
+    r = requests.get('https://www.google.com/trends/api/widgetdata/comparedgeo/csv?req=%7B%22geo%22%3A%7B%7D%2C%22comparisonItem%22%3A%5B%7B%22time%22%3A%222011-12-03%202016-12-03%22%2C%22complexKeywordsRestriction%22%3A%7B%22keyword%22%3A%5B%7B%22type%22%3A%22BROAD%22%2C%22value%22%3A%22' + term + '%22%7D%5D%7D%7D%5D%2C%22resolution%22%3A%22COUNTRY%22%2C%22locale%22%3A%22en-US%22%2C%22requestOptions%22%3A%7B%22property%22%3A%22%22%2C%22backend%22%3A%22IZG%22%2C%22category%22%3A0%7D%7D&token=APP6_UEAAAAAWESAvd4dZTl8n9BzAouebeW12mzknd18&tz=300')
+    return r.content
 
 def run(server_class=BaseHTTPServer.HTTPServer, handler_class=S, port=8000):
     server_address = ('', port)
