@@ -3,7 +3,7 @@ from scipy import stats
 import math
 import datetime
 
-def growthProbability(stockName):
+def growthProbability(stockName, paramList):
     stock = Share(stockName)
 
     weightPE = 0.01
@@ -65,7 +65,7 @@ def getFiveDayAvgPercentChange(stockName):
 def getFiveDayAvgChange(stockName):
     stock = Share(stockName)
     percentChange = getFiveDayAvgPercentChange(stockName)
-    return (percentChange / 100) * stock.get_price()
+    return abs((percentChange / 100) * stock.get_price())
 
 def getFiveDayHistoricalData(stockName):
     # Initialize values.
