@@ -10,71 +10,106 @@ function httpGetAsync(theUrl, callback)
 }
 
 function analyze(response) {
-    console.log(response);
     response = JSON.parse(response)
-    chartTrend(response['trend'], response['historical'][1]);
+    console.log(response);
+    chartTrend(response['trend'], response['historical'][1], response['historical'][2]);
 }
 
-function chartTrend(trend, stockData) {
+function chartTrend(trend, stockData, dates) {
+    var timeFormat = (function(date) {
+        console.log(date);
+        return (date.getMonth()+1) + '/' + date.getDate();
+    });
     var width = 700;
     var height = 500;
-    var margin = [25, 25, 25, 25];
+    var margin = [25, 25, 25, 60];
     var svg = d3.select('body').append('svg')
                 .attr('width', width)
                 .attr('height', height)
                 .append('g')
                     .attr('transform', 'translate(' + margin[3] + ',' + margin[0] + ')');
     var curDate = new Date();
-    var predictDate = new Date();
-    predictDate.setDate(curDate + 0.5);
-    var data = stockData.map(function(d, i) {
-                var date = new Date()
-                date.setDate(curDate.getDate() - (stockData.length - (i / 2)));
-                return {'date': date, 'value': d};
+    var todayOpen = new Date();
+    todayOpen.setHours(0,0,0,0);
+    todayOpen.setDate(todayOpen.getDate() + (9.5/24));
+    console.log(todayOpen);
+    var todayClose = new Date();
+    todayClose.setHours(0,0,0,0);
+    todayClose.setDate(todayClose.getDate() + (15.5/24));
+    console.log(todayClose);
+    var opens = dates.map(function(d) {
+        var date = new Date(d + ' EST');
+        date.setDate(date.getDate() + (9.5/24));
+        return date;
     });
-    data.unshift({'date': predictDate, 'value': data[0].value + trend.change});
-    var x = d3.time.scale()
-            .domain(d3.extent(data, function(d) { return d.date }))
+    var closes = dates.map(function(d) {
+        var date = new Date(d + ' EST');
+        date.setDate(date.getDate() + (15.5/24));
+        return date;
+    });
+    var dates = [];
+    for (var i = 0; i < opens.length; i++) {
+        dates.unshift(opens[i], closes[i]);
+    }
+    console.log(dates);
+    dates.push(todayOpen, todayClose);
+    dates.reverse();
+    var data = stockData.map(function(d, i) {
+                return {'date': dates[i], 'value': d};
+    });
+    data = data.slice(1);
+    data.reverse();
+    data.forEach(function(d, i) { d.x = i });
+    var predictedPoint = {'date': todayClose, 'value': data[data.length - 1].value + trend.change, 'x': data.length};
+    console.log(predictedPoint);
+    data.push(predictedPoint);
+    console.log(data);
+    var x = d3.scale.linear()
+            .domain(d3.extent(data, function(d) { return d.x }))
             .range([0, width - margin[1] - margin[3]]);
     var y = d3.scale.linear()
-            .domain(d3.extent(data, function(d) { return d.value }))
-            .range([0, height - margin[0] - margin[2]]);
+            .domain(d3.extent(data, function(d) { return d.value }).reverse())
+            .range([0, height - margin[0] - margin[2]])
+            .nice();
     var line = d3.svg.line()
-            .x(function(d) {
-                return x(d.date);
+            .x(function(d, i) {
+                return x(d.x);
             })
             .y(function(d) {
                 return y(d.value);
             });
     var xAxis = d3.svg.axis()
             .scale(x)
-            .orient('bottom');
+            .orient('bottom')
+            .tickFormat(function(d) { console.log(d); return timeFormat(data[d].date); });
     var yAxis = d3.svg.axis()
             .scale(y)
+            .innerTickSize(-1 * (width - margin[1] - margin[3]))
+            .outerTickSize(0)
             .orient('left');
 
-    svg.append('path')
+    var historic = data.slice(0, data.length - 1);
+    var predicted = data.slice(data.length - 2);
+
+    svg.append('g')
         .attr('class', 'axis')
-        .attr('transform', 'translate(0,' + (height - margin[0]) + ')')
+        .attr('transform', 'translate(0,' + (height - margin[0] - 24.5) + ')')
         .call(xAxis);
-    svg.append('path')
+    svg.append('g')
         .attr('class', 'axis')
         .call(yAxis);
     svg.append('path')
-        .attr('class', function(d, i) {
-            var str = 'line';
-            if (i == 0) {
-                if (trend.change >= 0) {
-                    str += ' growth';
-                } else {
-                    str += ' decline';
-                }
-            }
-            return str;
-        })
-        .attr('d', line(data));
+        .attr('class', 'line')
+        .attr('d', line(historic));
+    svg.append('path')
+        .attr('class', 'line ' + ((trend.change > 0) ? 'growth' : 'decline'))
+        .attr('d', line(predicted));
 }
 
 function getTrend(query) {
     httpGetAsync('http://localhost:8000?' + JSON.stringify({'term': query}), analyze);
 }
+
+var stuff = JSON.parse('{"trend": {"change": -0.6336346103466821}, "historical": [[5.5, 5.0, 4.5, 4.0, 3.5, 3.0, 2.5, 2.0, 1.5, 1.0, 0.5, 0], [109.11, 109.11, 109.169998, 109.900002, 110.370003, 109.489998, 111.599998, 110.519997, 110.779999, 111.459999, 111.43, 111.57], ["2016-12-02", "2016-12-01", "2016-11-30", "2016-11-29", "2016-11-28"]]}');
+console.log(stuff);
+chartTrend(stuff.trend, stuff.historical[1], stuff.historical[2]);
