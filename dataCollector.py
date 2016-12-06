@@ -3,36 +3,36 @@ from scipy import stats
 import math
 import datetime
 
-def getPERatio(stockName):
+def getPERatio(stockName, weight = 0.15):
     weightPE = 0.01
     stock = Share(stockName)
     PERatio = stock.get_price_earnings_ratio()
     if (PERatio is not None):
-        weightPE = 0.15
+        weightPE = weight
     return PERatio, weightPE
 
-def getPEGRatio(stockName):
+def getPEGRatio(stockName, weight = 0.3):
     weightPEG = 0.01
     stock = Share(stockName)
     PEGRatio = stock.get_price_earnings_growth_ratio()
     if (PEGRatio is not None):
-        weightPEG = 0.3
+        weightPEG = weight
     return PEGRatio, weightPEG
 
-def getShortRatio(stockName):
+def getShortRatio(stockName, weight = 0.15):
     weightShort = 0.01
     stock = Share(stockName)
     ShortRatio = stock.get_short_ratio()
     if (ShortRatio is not None):
-        weightShort = 0.15
+        weightShort = weight
     return ShortRatio, weightShort
 
-def getHistoricalData(stockName):
+def getHistoricalData(stockName, weight = 0.4):
     weightHistorical = 0.01
     stock = Share(stockName)
     try:
         historical = getFiveDayAvgPercentChange(stockName)
-        weightHistorical = 0.4
+        weightHistorical = weight
     except:
         return None, weightHistorical
     return historical, weightHistorical

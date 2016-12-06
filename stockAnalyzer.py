@@ -15,6 +15,6 @@ def growthProbability(stockName, paramList):
     probability = (PERatio * weightPE + PEGRatio * weightPEG + ShortRatio * weightShort + HistoricalData * weightHistorical) / (weightPE + weightPEG + weightShort + weightHistorical)
     return probability
 
-def growthProbability(PERatioList, PEGRatioList, ShortRatioList, HistoricalDataList, paramList):
-    
+def growthProbabilityTraining(PERatioList, PEGRatioList, ShortRatioList, HistoricalDataList, paramList):
+
     return probability

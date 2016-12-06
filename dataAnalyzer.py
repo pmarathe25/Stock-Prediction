@@ -4,43 +4,43 @@ import math
 import datetime
 import helpers
 
-def processPERatio(PERatio):
+def processPERatio(PERatio, paramList = [1, -1, 40, 0, 1]):
     #  Scale PE Ratio
     if (PERatio is not None):
-        PERatio = 1 - 1 / math.exp(float(PERatio) / 40)
-        PERatio = helpers.clamp(PERatio, 0, 1)
+        PERatio = paramList[0] + paramList[1] / math.exp(float(PERatio) / paramList[2])
+        PERatio = helpers.clamp(PERatio, paramList[3], paramList[4])
     else:
         print "Could not retrieve PE ratio."
         PERatio = 0
     return PERatio
 
-def processPEGRatio(PEGRatio):
+def processPEGRatio(PEGRatio, paramList = [2, 2, 0, 1]):
     # Scale PEG Ratio
     if (PEGRatio is not None):
-        PEGRatio = (2 - float(PEGRatio)) / 2
+        PEGRatio = (paramList[0] - float(PEGRatio)) / paramList[1]
         # Clamp PEG Ratio
-        PEGRatio = helpers.clamp(PEGRatio, 0, 1)
+        PEGRatio = helpers.clamp(PEGRatio, paramList[2], paramList[3])
     else:
         print "Could not retrieve PEG ratio."
         PEGRatio = 0
     return PEGRatio
 
-def processShortRatio(ShortRatio):
+def processShortRatio(ShortRatio, paramList = [1, -1, 5, 0, 1]):
     # Scale Short Ratio
     if (ShortRatio is not None):
-        ShortRatio = 1 - 1 / math.exp(float(ShortRatio) / 5)
-        ShortRatio = helpers.clamp(ShortRatio, 0, 1)
+        ShortRatio = paramList[0] + paramList[1] / math.exp(float(ShortRatio) / paramList[2])
+        ShortRatio = helpers.clamp(ShortRatio, paramList[3], paramList[4])
     else:
         print "Could not retrieve short ratio."
         ShortRatio = 0
     return ShortRatio
 
-def processHistorical(historical):
+def processHistorical(historical, paramList = [-7, 7, 7, 14, 5]):
     # Process historical data
     if (historical is not None):
         # Clamp historical price change between -4% and +4%
-        historical = helpers.clamp(historical, -7, 7)
-        historical = (historical + 7) / 14 + math.sin(historical / 5)
+        historical = helpers.clamp(historical, paramList[0], paramList[1])
+        historical = (historical + paramList[2]) / paramList[3] + math.sin(historical / paramList[4])
     else:
         print "Could not retrieve historical data."
         historical = 0
