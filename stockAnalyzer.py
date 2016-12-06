@@ -3,7 +3,7 @@ from scipy import stats
 import math
 import datetime
 
-def growthProbability(stockName):
+def growthProbability(stockName, paramList):
     stock = Share(stockName)
 
     weightPE = 0.01
