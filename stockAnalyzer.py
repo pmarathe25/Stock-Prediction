@@ -43,9 +43,7 @@ def growthProbability(stockName):
         ShortRatio = 0
 
     try:
-        historical = getFiveDaySlope(stockName)
-        # Scale 5 day slope
-        historical = float(historical) / float(stock.get_price()) * 100
+        historical = getFiveDayAvgPercentChange(stockName)
         # Clamp historical price change between -4% and +4%
         historical = clamp(historical, -7, 7)
         historical = (historical + 7) / 14 + math.sin(historical / 5)
@@ -57,10 +55,17 @@ def growthProbability(stockName):
     probability = (PERatio * weightPE + PEGRatio * weightPEG + ShortRatio * weightShort + historical * weightHistorical) / (weightPE + weightPEG + weightShort + weightHistorical)
     return probability
 
-def getFiveDaySlope(stockName):
+def getFiveDayAvgPercentChange(stockName):
+    stock = Share(stockName)
     x, y = getFiveDayHistoricalData(stockName)
     slope, intercept, r_value, p_value, std_err = stats.linregress(x,y)
-    return slope
+    percentChange = float(slope) / float(stock.get_price()) * 100
+    return percentChange
+
+def getFiveDayAvgChange(stockName):
+    stock = Share(stockName)
+    percentChange = getFiveDayAvgPercentChange(stockName)
+    return (percentChange / 100) * stock.get_price()
 
 def getFiveDayHistoricalData(stockName):
     # Initialize values.
