@@ -12,7 +12,7 @@ import re
 from datetime import datetime
 from datetime import timedelta
 
-class S(SimpleHTTPRequestHandler):
+class RequestHandler(SimpleHTTPRequestHandler):
     def end_headers(self):
         self.send_header('Access-Control-Allow-Origin', '*')
         SimpleHTTPRequestHandler.end_headers(self)
@@ -27,19 +27,21 @@ class S(SimpleHTTPRequestHandler):
         print parsed_path
         request = json.loads(urllib.unquote(parsed_path.query))
         requested_term = request['term']
-        response = {'trend': predictTrend(requested_term)}
+        response = {'trend': predictTrend(requested_term),
+                    'historical': stockAnalyzer.getFiveDayHistoricalData(requested_term)}
+        print response
         self.wfile.write(json.dumps(response))
 
     def do_HEAD(self):
         self._set_headers()
 
 def predictTrend(term):
-    growthProb = stockAnalyzer.growthProbability(term)
-    print 'growthProb: %f' % growthProb
+    change = stockAnalyzer.getFiveDayAvgChange(term)
+    print 'change: %f' % change
     volatility = searchTrend(term)
     print 'volatility: %f' % volatility
-    trend = growthProb * volatility
-    return trend
+    result = {'change': change * volatility}
+    return result
 
 def searchTrend(term):
     searchData = getTimeseriesData(term)
@@ -69,7 +71,7 @@ def getGeoData(term):
     r = requests.get('https://www.google.com/trends/api/widgetdata/comparedgeo/csv?req=%7B%22geo%22%3A%7B%7D%2C%22comparisonItem%22%3A%5B%7B%22time%22%3A%222011-12-03%202016-12-03%22%2C%22complexKeywordsRestriction%22%3A%7B%22keyword%22%3A%5B%7B%22type%22%3A%22BROAD%22%2C%22value%22%3A%22' + term + '%22%7D%5D%7D%7D%5D%2C%22resolution%22%3A%22COUNTRY%22%2C%22locale%22%3A%22en-US%22%2C%22requestOptions%22%3A%7B%22property%22%3A%22%22%2C%22backend%22%3A%22IZG%22%2C%22category%22%3A0%7D%7D&token=APP6_UEAAAAAWESAvd4dZTl8n9BzAouebeW12mzknd18&tz=300')
     return r.content
 
-def run(server_class=BaseHTTPServer.HTTPServer, handler_class=S, port=8000):
+def run(server_class=BaseHTTPServer.HTTPServer, handler_class=RequestHandler, port=8000):
     server_address = ('', port)
     httpd = server_class(server_address, handler_class)
     print 'Starting httpd...'
