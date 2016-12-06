@@ -25,7 +25,7 @@ function chartTrend(trend, stockData) {
                 .append('g')
                     .attr('transform', 'translate(' + margin[3] + ',' + margin[0] + ')');
     var curDate = new Date();
-    var predictDate = newDate();
+    var predictDate = new Date();
     predictDate.setDate(curDate + 0.5);
     var data = stockData.map(function(d, i) {
                 var date = new Date()
@@ -64,7 +64,7 @@ function chartTrend(trend, stockData) {
         .attr('class', function(d, i) {
             var str = 'line';
             if (i == 0) {
-                if (change >= 0) {
+                if (trend.change >= 0) {
                     str += ' growth';
                 } else {
                     str += ' decline';
