@@ -37,8 +37,8 @@ class RequestHandler(SimpleHTTPRequestHandler):
 
 def predictTrend(term):
     change = stockAnalyzer.getFiveDayAvgChange(term)
-    growthProb = stockAnalyzer.growthProbability(term)
-    if growth < 0.5:
+    growthProb = stockAnalyzer.growthProbability(term, [])
+    if growthProb < 0.5:
         change *= -1;
     print 'change: %f' % change
     volatility = searchTrend(term)
