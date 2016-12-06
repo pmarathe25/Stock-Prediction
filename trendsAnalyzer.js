@@ -13,6 +13,6 @@ function analyze(response) {
     console.log(response);
 }
 
-function getDataForQuery(query) {
-    httpGetAsync('http://localhost:8000?' + query, analyze);
+function getTrend(query) {
+    httpGetAsync('http://localhost:8000?' + JSON.stringify({'term': query}), analyze);
 }
