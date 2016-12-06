@@ -65,7 +65,7 @@ def getFiveDayAvgPercentChange(stockName):
 def getFiveDayAvgChange(stockName):
     stock = Share(stockName)
     percentChange = getFiveDayAvgPercentChange(stockName)
-    return abs((percentChange / 100) * stock.get_price())
+    return abs((percentChange / 100) * float(stock.get_price()))
 
 def getFiveDayHistoricalData(stockName):
     # Initialize values.
