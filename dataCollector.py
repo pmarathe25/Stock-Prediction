@@ -26,6 +26,10 @@ def getHistoricalData(stockName):
         return None
     return historical
 
+def getActualChange(stockName):
+    stock = Share(stockName)
+    return stock.get_change()
+
 def getFiveDayAvgPercentChange(stockName):
     stock = Share(stockName)
     x, y, date = getFiveDayHistoricalData(stockName)

@@ -17,5 +17,10 @@ def growthProbability(stockName, paramList):
 
 def growthProbabilityTraining(PERatioList, PEGRatioList, ShortRatioList, HistoricalDataList, paramList):
     # Accepts cached metric lists.
+    for PERatio, PEGRatio, ShortRatio, HistoricalData in zip (PERatioList, PEGRatioList, ShortRatioList, HistoricalDataList):
+        PERatio, weightPE = da.processPERatio(PERatio)
+        PEGRatio, weightPEG = da.processPEGRatio(PEGRatio)
+        ShortRatio, weightShort = da.processShortRatio(ShortRatio)
+        HistoricalData, weightHistorical = da.processHistorical(HistoricalData)
 
     return probabilityList
