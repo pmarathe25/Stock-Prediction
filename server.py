@@ -65,7 +65,7 @@ def searchTrend(term):
     return  lastDayTrend / avg
 
 def getTimeseriesData(term):
-    r = requests.get('https://www.google.com/trends/fetchComponent?hl=en-US&q=' + term + '&cid=TIMESERIES_GRAPH_0&export=3&date=now%207-d')
+    r = requests.get('https://www.google.com/trends/fetchComponent?hl=en-US&q=' + term + '&geo=US&cid=TIMESERIES_GRAPH_0&export=3&date=now%207-d')
     stripped = r.content[r.content.index('{') : r.content.rindex('}')]
     replaced = json.loads(re.sub(r'"v"([^"]|\\")*"f"', '"f"', stripped) + '}')
     return replaced
