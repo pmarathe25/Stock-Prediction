@@ -1,7 +1,7 @@
 function httpGetAsync(theUrl, callback)
 {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
+    xmlHttp.onreadystatechange = function() { 
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
             callback(xmlHttp.responseText);
     }
@@ -23,7 +23,8 @@ function chartTrend(trend, stockData, dates) {
     var width = 700;
     var height = 500;
     var margin = [25, 25, 25, 60];
-    var svg = d3.select('body').append('svg')
+    var svg = d3.select('#graph-container').append('svg')
+                .attr('class', 'graph')
                 .attr('width', width)
                 .attr('height', height)
                 .append('g')
@@ -107,6 +108,7 @@ function chartTrend(trend, stockData, dates) {
 }
 
 function getTrend(query) {
+    console.log("starting query for" + query);
     httpGetAsync('http://localhost:8000?' + JSON.stringify({'term': query}), analyze);
 }
 

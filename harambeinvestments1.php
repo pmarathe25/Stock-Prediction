@@ -21,6 +21,8 @@
     </div>
     </div>
     </div>
+    <div id="graph-container">
+    </div>
     <div id="footer">
       <div class="container">
         <p class="muted credit">Created By George Wang, Ojan Thornycroft, Pranav Marathe, Sreeramamurthy Tripuramallu</p>
@@ -39,13 +41,14 @@
               var temp = split[i].split("=");
               search = temp[1];
             }
+            getTrend(search);
           }
-          getTrend(search);
         }
         function get2() {
           var input = document.getElementById("search").value;
           getTrend(input);
         }
+        get1();
     </script>
   </body>
 </html>
