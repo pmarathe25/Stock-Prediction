@@ -8,6 +8,7 @@ import urlparse
 import urllib
 import requests
 import stockAnalyzer
+import dataCollector
 import re
 from datetime import datetime
 from datetime import timedelta
@@ -28,7 +29,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
         request = json.loads(urllib.unquote(parsed_path.query))
         requested_term = request['term']
         response = {'trend': predictTrend(requested_term),
-                    'historical': stockAnalyzer.getFiveDayHistoricalData(requested_term)}
+                    'historical': dataCollector.getFiveDayHistoricalData(requested_term)}
         print response
         self.wfile.write(json.dumps(response))
 
@@ -36,7 +37,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
         self._set_headers()
 
 def predictTrend(term):
-    change = stockAnalyzer.getFiveDayAvgChange(term)
+    change = dataCollector.getFiveDayAvgChange(term)
     growthProb = stockAnalyzer.growthProbability(term, [])
     if growthProb < 0.5:
         change *= -1;
