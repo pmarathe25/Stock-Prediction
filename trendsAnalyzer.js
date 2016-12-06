@@ -1,7 +1,7 @@
 function httpGetAsync(theUrl, callback)
 {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
+    xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
             callback(xmlHttp.responseText);
     }
@@ -110,6 +110,3 @@ function getTrend(query) {
     httpGetAsync('http://localhost:8000?' + JSON.stringify({'term': query}), analyze);
 }
 
-var stuff = JSON.parse('{"trend": {"change": -0.6336346103466821}, "historical": [[5.5, 5.0, 4.5, 4.0, 3.5, 3.0, 2.5, 2.0, 1.5, 1.0, 0.5, 0], [109.11, 109.11, 109.169998, 109.900002, 110.370003, 109.489998, 111.599998, 110.519997, 110.779999, 111.459999, 111.43, 111.57], ["2016-12-02", "2016-12-01", "2016-11-30", "2016-11-29", "2016-11-28"]]}');
-console.log(stuff);
-chartTrend(stuff.trend, stuff.historical[1], stuff.historical[2]);
