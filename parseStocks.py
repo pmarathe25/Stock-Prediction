@@ -4,5 +4,3 @@ def parseFile(filename):
         for line in f:
             symbols.append(line.split('|')[1])
     return symbols
-
-print parseFile('nasdaqtraded.txt')

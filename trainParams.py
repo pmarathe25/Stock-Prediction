@@ -1,6 +1,7 @@
 import stockAnalyzer as sa
 import dataCollector as dc
 import dataAnalyzer as da
+import parseStocks as ps
 from yahoo_finance import Share
 
 def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.001):
@@ -70,10 +71,11 @@ def loadData(stockList):
     return PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache
 
 if __name__ == '__main__':
-    derivativeStepRatio = 0.01
-    gradientStepRatio = 0.005
+    # trainingSet = ps.parseFile('nasdaqtraded.txt')
     trainingSet = ["TSLA", "BRK.B", "HD", "FB", "AAPL", "ANET", "NVDA", "TXN", "CRM",
         "NKE", "LUV", "GE", "TWTR", "MEET", "GOOG", "MSFT", "AMD", "YHOO", "NE",
         "BAC"]
     initialParamList = [1, -1, 40, 0, 1, 0.15, 2, 2, 0, 1, 0.3, 1, -1, 5, 0, 1, 0.15, -7, 7, 7, 14, 5, 0.4]
+    derivativeStepRatio = 0.01
+    gradientStepRatio = 0.005
     train(trainingSet, initialParamList, derivativeStepRatio, gradientStepRatio)
