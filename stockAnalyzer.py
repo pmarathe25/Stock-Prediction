@@ -2,19 +2,20 @@ import dataCollector as dc
 import dataAnalyzer as da
 
 def growthProbability(stockName, paramList):
-    PERatio, weightPE = dc.getPERatio(stockName)
-    PEGRatio, weightPEG = dc.getPEGRatio(stockName)
-    ShortRatio, weightShort = dc.getShortRatio(stockName)
-    HistoricalData, weightHistorical = dc.getHistoricalData(stockName)
+    PERatio = dc.getPERatio(stockName)
+    PEGRatio = dc.getPEGRatio(stockName)
+    ShortRatio = dc.getShortRatio(stockName)
+    HistoricalData = dc.getHistoricalData(stockName)
 
-    PERatio = da.processPERatio(PERatio)
-    PEGRatio = da.processPEGRatio(PEGRatio)
-    ShortRatio = da.processShortRatio(ShortRatio)
-    HistoricalData = da.processHistorical(HistoricalData)
+    PERatio, weightPE = da.processPERatio(PERatio)
+    PEGRatio, weightPEG = da.processPEGRatio(PEGRatio)
+    ShortRatio, weightShort = da.processShortRatio(ShortRatio)
+    HistoricalData, weightHistorical = da.processHistorical(HistoricalData)
 
     probability = (PERatio * weightPE + PEGRatio * weightPEG + ShortRatio * weightShort + HistoricalData * weightHistorical) / (weightPE + weightPEG + weightShort + weightHistorical)
     return probability
 
 def growthProbabilityTraining(PERatioList, PEGRatioList, ShortRatioList, HistoricalDataList, paramList):
+    # Accepts cached metric lists.
 
-    return probability
+    return probabilityList
