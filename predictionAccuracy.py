@@ -2,7 +2,9 @@ import stockAnalyzer
 from yahoo_finance import Share
 
 def getAccuracy():
-    stocks = ["TSLA", "BRK.B", "HD", "FB", "AAPL", "ANET", "NVDA", "TXN", "CRM", "NKE", "LUV", "GE", "TWTR", "MEET", "GOOG", "MSFT", "AMD", "YHOO", "NE", "BAC"]
+    stocks = ["TSLA", "BRK.B", "HD", "FB", "AAPL", "ANET", "NVDA", "TXN", "CRM",
+        "NKE", "LUV", "GE", "TWTR", "MEET", "GOOG", "MSFT", "AMD", "YHOO", "NE",
+        "BAC"]
     total = 0
     correct = 0
     for stock in stocks:
