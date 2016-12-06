@@ -15,6 +15,7 @@ def growthProbability(stockName):
     #  Scale PE Ratio
     if (PERatio is not None):
         PERatio = 1 - 1 / math.exp(float(PERatio) / 40)
+        PERatio = clamp(PERatio, 0, 1)
         weightPE = 0.15
     else:
         print "Could not retrieve PE ratio."
@@ -35,6 +36,7 @@ def growthProbability(stockName):
     # Scale Short Ratio
     if (ShortRatio is not None):
         ShortRatio = 1 - 1 / math.exp(float(ShortRatio) / 5)
+        ShortRatio = clamp(ShortRatio, 0, 1)
         weightShort = 0.15
     else:
         print "Could not retrieve short ratio."
@@ -44,9 +46,9 @@ def growthProbability(stockName):
         historical = getFiveDaySlope(stockName)
         # Scale 5 day slope
         historical = float(historical) / float(stock.get_price()) * 100
-        # Clamp historical price change between -100% and +5%
-        historical = clamp(historical, -5, 5)
-        historical = historical / 5 + math.sin(historical / 5)
+        # Clamp historical price change between -4% and +4%
+        historical = clamp(historical, -7, 7)
+        historical = (historical + 7) / 14 + math.sin(historical / 5)
         weightHistorical = 0.4
     except:
         print "Could not retrieve historical data."
@@ -56,6 +58,11 @@ def growthProbability(stockName):
     return probability
 
 def getFiveDaySlope(stockName):
+    x, y = getFiveDayHistoricalData(stockName)
+    slope, intercept, r_value, p_value, std_err = stats.linregress(x,y)
+    return slope
+
+def getFiveDayHistoricalData(stockName):
     # Initialize values.
     stock = Share(stockName)
     x = []
@@ -72,8 +79,7 @@ def getFiveDaySlope(stockName):
         y += [float(historicalData[i]['Open']), float(historicalData[i]['Close'])]
     x += [0.5, 0]
     y = [float(stock.get_price()), float(stock.get_price())] + y
-    slope, intercept, r_value, p_value, std_err = stats.linregress(x,y)
-    return slope
+    return x, y
 
 def clamp(value, lowerBound, upperBound):
     if value < lowerBound:
