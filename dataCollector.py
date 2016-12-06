@@ -6,16 +6,22 @@ import datetime
 def getPERatio(stockName):
     stock = Share(stockName)
     PERatio = stock.get_price_earnings_ratio()
+    if (PERatio is None):
+        print "Could not retrieve PE ratio."
     return PERatio
 
 def getPEGRatio(stockName):
     stock = Share(stockName)
     PEGRatio = stock.get_price_earnings_growth_ratio()
+    if (PEGRatio is None):
+        print "Could not retrieve PEG ratio."
     return PEGRatio
 
 def getShortRatio(stockName):
     stock = Share(stockName)
     ShortRatio = stock.get_short_ratio()
+    if (ShortRatio is None):
+        print "Could not retrieve short ratio."
     return ShortRatio
 
 def getHistoricalData(stockName):
@@ -23,6 +29,7 @@ def getHistoricalData(stockName):
     try:
         historical = getFiveDayAvgPercentChange(stockName)
     except:
+        print "Could not retrieve historical data."
         return None
     return historical
 

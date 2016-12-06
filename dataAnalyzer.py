@@ -12,7 +12,6 @@ def processPERatio(PERatio, paramList = [1, -1, 40, 0, 1, 0.15]):
         PERatio = helpers.clamp(PERatio, paramList[3], paramList[4])
         weightPE = paramList[5]
     else:
-        print "Could not retrieve PE ratio."
         PERatio = 0
     return PERatio, weightPE
 
@@ -25,7 +24,6 @@ def processPEGRatio(PEGRatio, paramList = [2, 2, 0, 1, 0.3]):
         PEGRatio = helpers.clamp(PEGRatio, paramList[2], paramList[3])
         weightPEG = paramList[4]
     else:
-        print "Could not retrieve PEG ratio."
         PEGRatio = 0
     return PEGRatio, weightPEG
 
@@ -37,7 +35,6 @@ def processShortRatio(ShortRatio, paramList = [1, -1, 5, 0, 1, 0.15]):
         ShortRatio = helpers.clamp(ShortRatio, paramList[3], paramList[4])
         weightShort = paramList[5]
     else:
-        print "Could not retrieve short ratio."
         ShortRatio = 0
     return ShortRatio, weightShort
 
@@ -50,7 +47,6 @@ def processHistorical(historical, paramList = [-7, 7, 7, 14, 5, 0.4]):
         historical = (historical + paramList[2]) / paramList[3] + math.sin(historical / paramList[4])
         weightHistorical = paramList[5]
     else:
-        print "Could not retrieve historical data."
         historical = 0
     return historical, weightHistorical
 
@@ -66,6 +62,7 @@ def getCorrectPercentage(actualChangeList, predictedChangeList):
     return correct / total
 
 def getPredictionAccuracyScore(actualChangeList, predictedChangeList):
+    predictionScore = 0
     for actual, predicted in zip(actualChangeList, predictedChangeList):
         if (actual is not None):
             actual = float(actual)
