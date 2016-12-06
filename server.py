@@ -8,6 +8,7 @@ import urlparse
 import urllib
 import requests
 import stockAnalyzer
+import dataCollector
 import re
 from datetime import datetime
 from datetime import timedelta
@@ -28,7 +29,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
         request = json.loads(urllib.unquote(parsed_path.query))
         requested_term = request['term']
         response = {'trend': predictTrend(requested_term),
-                    'historical': stockAnalyzer.getFiveDayHistoricalData(requested_term)}
+                    'historical': dataCollector.getFiveDayHistoricalData(requested_term)}
         print response
         self.wfile.write(json.dumps(response))
 
@@ -36,9 +37,9 @@ class RequestHandler(SimpleHTTPRequestHandler):
         self._set_headers()
 
 def predictTrend(term):
-    change = stockAnalyzer.getFiveDayAvgChange(term)
-    growthProb = stockAnalyzer.growthProbability(term)
-    if growth < 0.5:
+    change = dataCollector.getFiveDayAvgChange(term)
+    growthProb = stockAnalyzer.growthProbability(term, [])
+    if growthProb < 0.5:
         change *= -1;
     print 'change: %f' % change
     volatility = searchTrend(term)
@@ -65,7 +66,7 @@ def searchTrend(term):
     return  lastDayTrend / avg
 
 def getTimeseriesData(term):
-    r = requests.get('https://www.google.com/trends/fetchComponent?hl=en-US&q=' + term + '&cid=TIMESERIES_GRAPH_0&export=3&date=now%207-d')
+    r = requests.get('https://www.google.com/trends/fetchComponent?hl=en-US&q=' + term + '&geo=US&cid=TIMESERIES_GRAPH_0&export=3&date=now%207-d')
     stripped = r.content[r.content.index('{') : r.content.rindex('}')]
     replaced = json.loads(re.sub(r'"v"([^"]|\\")*"f"', '"f"', stripped) + '}')
     return replaced
