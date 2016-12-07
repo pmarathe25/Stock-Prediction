@@ -26,6 +26,20 @@ class stockAnalyzer:
             + weightPEG + weightShort + weightHistorical)
         return probability
 
+    def growthProbabilityBatch(self, PERatioList, PEGRatioList, ShortRatioList, HistoricalDataList):
+        probabilityList = []
+        # Accepts cached metric lists.
+        for PERatio, PEGRatio, ShortRatio, HistoricalData in zip (PERatioList, PEGRatioList, ShortRatioList, HistoricalDataList):
+            PERatio, weightPE = da.processPERatio(PERatio, self.paramList[0:6])
+            PEGRatio, weightPEG = da.processPEGRatio(PEGRatio, self.paramList[6:11])
+            ShortRatio, weightShort = da.processShortRatio(ShortRatio, self.paramList[11:17])
+            HistoricalData, weightHistorical = da.processHistorical(HistoricalData, self.paramList[17:])
+            probability = (PERatio * weightPE + PEGRatio * weightPEG + ShortRatio
+                * weightShort + HistoricalData * weightHistorical) / (weightPE
+                + weightPEG + weightShort + weightHistorical)
+            probabilityList.append(probability)
+        return probabilityList
+
     def growthProbabilityTraining(self, PERatioList, PEGRatioList, ShortRatioList, HistoricalDataList, testParams):
         probabilityList = []
         # Accepts cached metric lists.

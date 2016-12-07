@@ -3,6 +3,7 @@ import dataCollector as dc
 import dataAnalyzer as da
 import parseStocks as ps
 from yahoo_finance import Share
+import sys
 import random
 
 def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.001):
@@ -15,7 +16,7 @@ def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.0
     # Gradient
     partialDerivatives = []
     # Load data.
-    PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache = loadData(stocks)
+    PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache = dc.loadData(stocks)
     iterations = 0
     maxAccuracy = None
     bestParams = []
@@ -104,20 +105,6 @@ def getAccuracy(PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCach
     predictedList = analyzer.growthProbabilityTraining(PECache, PEGCache, ShortCache, HistoricalCache, initialParamList)
     accuracyScore = da.getPredictionAccuracyScore(ActualChangeCache, predictedList)
     return accuracyScore
-
-def loadData(stockList):
-    PECache = []
-    PEGCache = []
-    ShortCache = []
-    HistoricalCache = []
-    ActualChangeCache = []
-    for stock in stockList:
-        PECache.append(dc.getPERatio(stock))
-        PEGCache.append(dc.getPEGRatio(stock))
-        ShortCache.append(dc.getShortRatio(stock))
-        HistoricalCache.append(dc.getHistoricalData(stock))
-        ActualChangeCache.append(dc.getActualChange(stock))
-    return PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache
 
 if __name__ == '__main__':
     trainingSet = ps.parseFile('nasdaqtraded.txt')[0::40]

@@ -7,10 +7,7 @@ def getPERatio(stockName):
     try:
         stock = Share(stockName)
         PERatio = stock.get_price_earnings_ratio()
-        if (PERatio is None):
-            print "Could not retrieve PE ratio."
     except:
-        print "Could not retrieve PE ratio."
         return None
     return PERatio
 
@@ -18,10 +15,7 @@ def getPEGRatio(stockName):
     try:
         stock = Share(stockName)
         PEGRatio = stock.get_price_earnings_growth_ratio()
-        if (PEGRatio is None):
-            print "Could not retrieve PEG ratio."
     except:
-        print "Could not retrieve PEG ratio."
         return None
     return PEGRatio
 
@@ -29,10 +23,7 @@ def getShortRatio(stockName):
     try:
         stock = Share(stockName)
         ShortRatio = stock.get_short_ratio()
-        if (ShortRatio is None):
-            print "Could not retrieve short ratio."
     except:
-        print "Could not retrieve short ratio."
         return None
     return ShortRatio
 
@@ -41,7 +32,6 @@ def getHistoricalData(stockName):
         stock = Share(stockName)
         historical = getFiveDayAvgPercentChange(stockName)
     except:
-        print "Could not retrieve historical data."
         return None
     return historical
 
@@ -93,3 +83,19 @@ def getFiveDayHistoricalData(stockName):
         return x, y, date
     except:
         return None, None, None
+
+def loadData(stockList):
+    PECache = []
+    PEGCache = []
+    ShortCache = []
+    HistoricalCache = []
+    ActualChangeCache = []
+    for index, stock in enumerate(stockList):
+        sys.stdout.write("Progress: %d / %d stocks loaded. \r" % (index, len(stockList)))
+        sys.stdout.flush()
+        PECache.append(dc.getPERatio(stock))
+        PEGCache.append(dc.getPEGRatio(stock))
+        ShortCache.append(dc.getShortRatio(stock))
+        HistoricalCache.append(dc.getHistoricalData(stock))
+        ActualChangeCache.append(dc.getActualChange(stock))
+    return PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache
