@@ -9,10 +9,10 @@ def getAccuracy():
     # evaluationSet = ["TSLA", "BRK.B", "HD", "FB", "AAPL", "ANET", "NVDA", "TXN", "CRM",
     #     "NKE", "LUV", "GE", "TWTR", "MEET", "GOOG", "MSFT", "AMD", "YHOO", "NE",
     #     "BAC"]
-    PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache = dc.loadData(stocks)
+    PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache = dc.loadData(evaluationSet)
     analyzer = sa.stockAnalyzer('parameterList')
     predictedList = analyzer.growthProbabilityBatch(PECache, PEGCache, ShortCache, HistoricalCache)
-    correctPercentage = getCorrectPercentage(ActualChangeCache, predictedList)
+    correctPercentage = da.getCorrectPercentage(ActualChangeCache, predictedList)
 
 if __name__ == '__main__':
     getAccuracy()

@@ -1,5 +1,6 @@
 from yahoo_finance import Share
 from scipy import stats
+import sys
 import math
 import datetime
 
@@ -93,9 +94,9 @@ def loadData(stockList):
     for index, stock in enumerate(stockList):
         sys.stdout.write("Progress: %d / %d stocks loaded. \r" % (index, len(stockList)))
         sys.stdout.flush()
-        PECache.append(dc.getPERatio(stock))
-        PEGCache.append(dc.getPEGRatio(stock))
-        ShortCache.append(dc.getShortRatio(stock))
-        HistoricalCache.append(dc.getHistoricalData(stock))
-        ActualChangeCache.append(dc.getActualChange(stock))
+        PECache.append(getPERatio(stock))
+        PEGCache.append(getPEGRatio(stock))
+        ShortCache.append(getShortRatio(stock))
+        HistoricalCache.append(getHistoricalData(stock))
+        ActualChangeCache.append(getActualChange(stock))
     return PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache

@@ -3,7 +3,6 @@ import dataCollector as dc
 import dataAnalyzer as da
 import parseStocks as ps
 from yahoo_finance import Share
-import sys
 import random
 
 def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.001):
