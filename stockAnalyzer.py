@@ -6,7 +6,7 @@ class stockAnalyzer:
     def __init__(self, filename):
         if type(filename) == type([]):
             print "Using provided parameter list."
-            self.paramList = filename
+            self.paramList = filename[:]
         else:
             self.paramList = self.readParams(filename)
 

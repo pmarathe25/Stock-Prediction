@@ -17,13 +17,13 @@ def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.0
     # Load data.
     PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache = loadData(stocks)
     iterations = 0
-    maxAccuracy = 0
+    maxAccuracy = None
     bestParams = []
     oldBestParams = []
     # Create stock analyzer object
     analyzer = sa.stockAnalyzer(paramList)
     newAccuracy = 0
-    # Train until kerboard interrupt. Every 30000 iterations (or when best
+    # Train until kerboard interrupt. Every 2000 iterations (or when best
     # parameters have been found), save the best parameters found so far to a
     # file and then randomize the parameterList.
     try:
@@ -35,18 +35,18 @@ def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.0
             paramList = gradientAscent(partialDerivatives, paramList, gradientStepRatio)
             newAccuracy = getAccuracy(PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache, paramList, analyzer)
             # Check max.
-            if (newAccuracy > maxAccuracy):
+            if (maxAccuracy is None or newAccuracy > maxAccuracy):
                 maxAccuracy = newAccuracy
-                oldBestParams = bestParams
+                oldBestParams = bestParams[:]
                 bestParams = paramList[:]
-            # Save at 30000 iterations.
-            if (iterations == 29999 or oldBestParams == bestParams):
+            # Save at 2000 iterations.
+            if (iterations == 1999 or oldBestParams == bestParams):
                 iterations = 0
                 oldBestParams = []
                 # Save the best params so far.
                 writeBestParams('parameterList', bestParams)
                 # Randomize the parameterList
-                paramList = randomizeParamList(bestParams)
+                paramList = randomizeParamList(bestParams)[:]
     except KeyboardInterrupt:
         writeBestParams('parameterList', bestParams)
     print
@@ -120,10 +120,10 @@ def loadData(stockList):
     return PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache
 
 if __name__ == '__main__':
-    trainingSet = ps.parseFile('nasdaqtraded.txt')
-    # trainingSet = ["TSLA", "BRK.B", "HD", "FB", "AAPL", "ANET", "NVDA", "TXN", "CRM",
-    #     "NKE", "LUV", "GE", "TWTR", "MEET", "GOOG", "MSFT", "AMD", "YHOO", "NE",
-    #     "BAC"]
+    # trainingSet = ps.parseFile('nasdaqtraded.txt')
+    trainingSet = ["TSLA", "BRK.B", "HD", "FB", "AAPL", "ANET", "NVDA", "TXN", "CRM",
+        "NKE", "LUV", "GE", "TWTR", "MEET", "GOOG", "MSFT", "AMD", "YHOO", "NE",
+        "BAC"]
     initialParamList = [1, -1, 40, 0, 1, 0.15, 2, 2, 0, 1, 0.3, 1, -1, 5, 0, 1, 0.15, -7, 7, 7, 14, 5, 0.4]
     derivativeStepRatio = 0.025
     gradientStepRatio = 0.001
