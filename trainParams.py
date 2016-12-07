@@ -120,10 +120,10 @@ def loadData(stockList):
     return PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache
 
 if __name__ == '__main__':
-    # trainingSet = ps.parseFile('nasdaqtraded.txt')
-    trainingSet = ["TSLA", "BRK.B", "HD", "FB", "AAPL", "ANET", "NVDA", "TXN", "CRM",
-        "NKE", "LUV", "GE", "TWTR", "MEET", "GOOG", "MSFT", "AMD", "YHOO", "NE",
-        "BAC"]
+    trainingSet = ps.parseFile('nasdaqtraded.txt')[0::40]
+    # trainingSet = ["TSLA", "BRK.B", "HD", "FB", "AAPL", "ANET", "NVDA", "TXN", "CRM",
+    #     "NKE", "LUV", "GE", "TWTR", "MEET", "GOOG", "MSFT", "AMD", "YHOO", "NE",
+    #     "BAC"]
     initialParamList = [1, -1, 40, 0, 1, 0.15, 2, 2, 0, 1, 0.3, 1, -1, 5, 0, 1, 0.15, -7, 7, 7, 14, 5, 0.4]
     derivativeStepRatio = 0.025
     gradientStepRatio = 0.001
