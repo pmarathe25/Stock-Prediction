@@ -1,17 +1,18 @@
-import stockAnalyzer
+import stockAnalyzer as sa
 from yahoo_finance import Share
 
-def getAccuracy(paramList):
+def getAccuracy():
     stocks = ["TSLA", "BRK.B", "HD", "FB", "AAPL", "ANET", "NVDA", "TXN", "CRM",
         "NKE", "LUV", "GE", "TWTR", "MEET", "GOOG", "MSFT", "AMD", "YHOO", "NE",
         "BAC"]
     total = 0
     correct = 0
+    analyzer = sa.stockAnalyzer('parameterList')
     for stock in stocks:
         print stock
         stockActual = Share(stock)
         actual = stockActual.get_change()
-        probability = stockAnalyzer.growthProbability(stock, paramList)
+        probability = analyzer.growthProbability(stock)
         if (actual is not None):
             print float(actual)
             print probability
@@ -28,4 +29,4 @@ def getAccuracy(paramList):
     return correct / total
 
 if __name__ == '__main__':
-    getAccuracy([])
+    getAccuracy()

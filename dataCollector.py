@@ -70,7 +70,6 @@ def getFiveDayAvgChange(stockName):
     except:
         return None
 
-
 def getFiveDayHistoricalData(stockName):
     try:
         # Initialize values.

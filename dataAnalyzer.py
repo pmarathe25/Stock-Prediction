@@ -66,8 +66,11 @@ def getPredictionAccuracyScore(actualChangeList, predictedChangeList):
     for actual, predicted in zip(actualChangeList, predictedChangeList):
         if (actual is not None):
             actual = float(actual)
-            if (predicted >= .5 and actual >= 0):
-                predictionScore += predicted
-            elif (predicted <= .5 and actual <= 0):
-                predictionScore += (1 - predicted)
+            # Penalize out of range predictions heavily.
+            if (predicted > 1 or predicted < 0):
+                predictionScore -= 1
+            elif (actual > 0):
+                predictionScore += (predicted - 0.5)
+            elif (actual <= 0):
+                predictionScore += (0.5 - predicted)
     return predictionScore
