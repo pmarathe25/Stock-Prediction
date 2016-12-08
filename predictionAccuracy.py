@@ -5,14 +5,15 @@ import dataAnalyzer as da
 from yahoo_finance import Share
 
 def getAccuracy():
-    evaluationSet = ps.parseFile('nasdaqtraded.txt')[0::53]
+    evaluationSet = ps.parseFile('nasdaqtraded.txt')[0::37]
     # evaluationSet = ["TSLA", "BRK.B", "HD", "FB", "AAPL", "ANET", "NVDA", "TXN", "CRM",
     #     "NKE", "LUV", "GE", "TWTR", "MEET", "GOOG", "MSFT", "AMD", "YHOO", "NE",
     #     "BAC"]
-    PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache = dc.loadData(evaluationSet)
+    PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache = dc.loadData(evaluationSet, 1, 6)
     analyzer = sa.stockAnalyzer('parameterList')
     predictedList = analyzer.growthProbabilityBatch(PECache, PEGCache, ShortCache, HistoricalCache)
     correctPercentage = da.getCorrectPercentage(ActualChangeCache, predictedList)
+    return correctPercentage
 
 if __name__ == '__main__':
-    getAccuracy()
+    print getAccuracy()

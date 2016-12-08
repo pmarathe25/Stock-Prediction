@@ -15,7 +15,7 @@ def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.0
     # Gradient
     partialDerivatives = []
     # Load data.
-    PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache = dc.loadData(stocks)
+    PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache = dc.loadData(stocks, 1, 6)
     iterations = 0
     maxAccuracy = None
     bestParams = []
@@ -106,7 +106,7 @@ def getAccuracy(PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCach
     return accuracyScore
 
 if __name__ == '__main__':
-    trainingSet = ps.parseFile('nasdaqtraded.txt')[0::40]
+    trainingSet = ps.parseFile('nasdaqtraded.txt')[0::7]
     # trainingSet = ["TSLA", "BRK.B", "HD", "FB", "AAPL", "ANET", "NVDA", "TXN", "CRM",
     #     "NKE", "LUV", "GE", "TWTR", "MEET", "GOOG", "MSFT", "AMD", "YHOO", "NE",
     #     "BAC"]

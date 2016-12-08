@@ -46,7 +46,7 @@ def getActualChange(stockName):
 def getFiveDayAvgPercentChange(stockName):
     try:
         stock = Share(stockName)
-        x, y, date = getFiveDayHistoricalData(stockName)
+        x, y, date = getWeekHistoricalData(stockName, -5, 0)
         slope, intercept, r_value, p_value, std_err = stats.linregress(x,y)
         percentChange = float(slope) / float(stock.get_price()) * 100
         return percentChange
@@ -61,7 +61,7 @@ def getFiveDayAvgChange(stockName):
     except:
         return None
 
-def getFiveDayHistoricalData(stockName):
+def getWeekHistoricalData(stockName, startDay, endDay):
     try:
         # Initialize values.
         stock = Share(stockName)
@@ -73,10 +73,11 @@ def getFiveDayHistoricalData(stockName):
         startDate = (datetime.datetime.now() - datetime.timedelta(days = 8)).strftime("%Y-%m-%d")
         # Get only the last 5 business days.
         historicalData = stock.get_historical(startDate, endDate)
-        historicalData = historicalData[-5:]
+        historicalData = historicalData[startDay:endDay]
         # Create a graph where the x axis is 0 - 4.5 and the y axis is open and close prices
-        for i in range(5):
-            x += [5.5 - i, 5.5 - (i + float(1) / 2)]
+        numDays = endDay - startDay
+        for i in range(numDays):
+            x += [(numDays + 0.5) - i, (numDays + 0.5) - (i + float(1) / 2)]
             y += [float(historicalData[i]['Open']), float(historicalData[i]['Close'])]
             date += [historicalData[i]['Date']]
         x += [0.5, 0]
@@ -85,7 +86,7 @@ def getFiveDayHistoricalData(stockName):
     except:
         return None, None, None
 
-def loadData(stockList):
+def loadData(stockList, startDay, endDay):
     PECache = []
     PEGCache = []
     ShortCache = []
@@ -97,6 +98,7 @@ def loadData(stockList):
         PECache.append(getPERatio(stock))
         PEGCache.append(getPEGRatio(stock))
         ShortCache.append(getShortRatio(stock))
-        HistoricalCache.append(getHistoricalData(stock))
+        HistoricalCache.append(getWeekHistoricalData(stock, startDay, endDay))
         ActualChangeCache.append(getActualChange(stock))
+    print
     return PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache
