@@ -19,7 +19,6 @@ def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.0
     iterations = 0
     maxAccuracy = None
     bestParams = []
-    oldBestParams = []
     # Create stock analyzer object
     analyzer = sa.stockAnalyzer(paramList)
     newAccuracy = 0
@@ -37,12 +36,10 @@ def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.0
             # Check max.
             if (maxAccuracy is None or newAccuracy > maxAccuracy):
                 maxAccuracy = newAccuracy
-                oldBestParams = bestParams[:]
                 bestParams = paramList[:]
             # Save at 2000 iterations.
-            if (iterations == 1999 or oldBestParams == bestParams):
+            if (iterations == 1999):
                 iterations = 0
-                oldBestParams = []
                 # Save the best params so far.
                 writeBestParams('parameterList', bestParams)
                 # Randomize the parameterList
