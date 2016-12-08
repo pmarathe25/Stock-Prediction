@@ -40,6 +40,8 @@ def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.0
             # Save at 2000 iterations.
             if (iterations == 1999):
                 iterations = 0
+                print "Maximum accuracy score."
+                print maxAccuracy
                 # Save the best params so far.
                 writeBestParams('parameterList', bestParams)
                 # Randomize the parameterList
@@ -61,7 +63,7 @@ def randomizeParamList(bestParams):
     random.seed()
     paramList = bestParams[:]
     for index, param in enumerate(paramList):
-        paramList[index] = random.random() * (3 * param) - param
+        paramList[index] = random.random() * (5 * param) - (2 * param)
     return paramList
 
 def writeBestParams(filename, bestParams):

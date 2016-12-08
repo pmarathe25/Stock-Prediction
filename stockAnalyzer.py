@@ -14,7 +14,7 @@ class stockAnalyzer:
         PERatio = dc.getPERatio(stockName)
         PEGRatio = dc.getPEGRatio(stockName)
         ShortRatio = dc.getShortRatio(stockName)
-        HistoricalData = dc.getHistoricalData(stockName)
+        HistoricalData = dc.getHistoricalData(stockName, 0, 5)
 
         PERatio, weightPE = da.processPERatio(PERatio, self.paramList[0:6])
         PEGRatio, weightPEG = da.processPEGRatio(PEGRatio, self.paramList[6:11])

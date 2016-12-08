@@ -28,10 +28,10 @@ def getShortRatio(stockName):
         return None
     return ShortRatio
 
-def getHistoricalData(stockName):
+def getHistoricalData(stockName, startDay, endDay):
     try:
         stock = Share(stockName)
-        historical = getFiveDayAvgPercentChange(stockName)
+        historical = getWeekAvgPercentChange(stockName, startDay, endDay)
     except:
         return None
     return historical
@@ -43,20 +43,20 @@ def getActualChange(stockName):
     except:
         return None
 
-def getFiveDayAvgPercentChange(stockName):
+def getWeekAvgPercentChange(stockName, startDay, endDay):
     try:
         stock = Share(stockName)
-        x, y, date = getWeekHistoricalData(stockName, -5, 0)
+        x, y, date = getWeekHistoricalData(stockName, startDay, endDay)
         slope, intercept, r_value, p_value, std_err = stats.linregress(x,y)
         percentChange = float(slope) / float(stock.get_price()) * 100
         return percentChange
     except:
         return None
 
-def getFiveDayAvgChange(stockName):
+def getWeekAvgChange(stockName, startDay, endDay):
     try:
         stock = Share(stockName)
-        percentChange = getFiveDayAvgPercentChange(stockName)
+        percentChange = getWeekAvgPercentChange(stockName, startDay, endDay)
         return abs((percentChange / 100) * float(stock.get_price()))
     except:
         return None
@@ -98,7 +98,7 @@ def loadData(stockList, startDay, endDay):
         PECache.append(getPERatio(stock))
         PEGCache.append(getPEGRatio(stock))
         ShortCache.append(getShortRatio(stock))
-        HistoricalCache.append(getWeekHistoricalData(stock, startDay, endDay))
+        HistoricalCache.append(getHistoricalData(stock, startDay, endDay))
         ActualChangeCache.append(getActualChange(stock))
     print
     return PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache
