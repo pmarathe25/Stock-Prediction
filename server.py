@@ -28,7 +28,8 @@ class RequestHandler(SimpleHTTPRequestHandler):
         print parsed_path
         request = json.loads(urllib.unquote(parsed_path.query))
         requested_term = request['term']
-        response = {'trend': predictTrend(requested_term),
+        response = {'symbol': requested_term,
+                    'trend': predictTrend(requested_term),
                     'historical': dataCollector.getWeekHistoricalData(requested_term, 0, 5)}
         print response
         self.wfile.write(json.dumps(response))

@@ -12,10 +12,10 @@ function httpGetAsync(theUrl, callback)
 function analyze(response) {
     response = JSON.parse(response)
     console.log(response);
-    chartTrend(response['trend'], response['historical'][1], response['historical'][2]);
+    chartTrend(response['symbol'], response['trend'], response['historical'][1], response['historical'][2]);
 }
 
-function chartTrend(trend, stockData, dates) {
+function chartTrend(symbol, trend, stockData, dates) {
     var timeFormat = (function(date) {
         console.log(date);
         return (date.getMonth()+1) + '/' + date.getDate();
@@ -105,6 +105,13 @@ function chartTrend(trend, stockData, dates) {
     svg.append('path')
         .attr('class', 'line ' + ((trend.change > 0) ? 'growth' : 'decline'))
         .attr('d', line(predicted));
+
+    svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", -margin)
+        .attr("text-anchor", "middle")  
+        .style("font-size", "40px") 
+        .text(symbol);
 }
 
 function getTrend(query) {

@@ -143,3 +143,9 @@ a.muted:focus {
     display: block;
     margin: auto;
 }
+
+.title {
+    margin: 30px;
+    text-anchor: middle;
+    align: center;
+}
