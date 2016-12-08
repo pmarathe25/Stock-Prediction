@@ -29,7 +29,7 @@ class RequestHandler(SimpleHTTPRequestHandler):
         request = json.loads(urllib.unquote(parsed_path.query))
         requested_term = request['term']
         response = {'trend': predictTrend(requested_term),
-                    'historical': dataCollector.getFiveDayHistoricalData(requested_term)}
+                    'historical': dataCollector.getWeekHistoricalData(requested_term, 0, 5)}
         print response
         self.wfile.write(json.dumps(response))
 
@@ -37,8 +37,9 @@ class RequestHandler(SimpleHTTPRequestHandler):
         self._set_headers()
 
 def predictTrend(term):
-    change = dataCollector.getFiveDayAvgChange(term)
-    growthProb = stockAnalyzer.growthProbability(term, [])
+    sa = stockAnalyzer.stockAnalyzer('parameterList')
+    change = dataCollector.getWeekAvgChange(term, 0, 5)
+    growthProb = sa.growthProbability(term)
     if growthProb < 0.5:
         change *= -1;
     print 'change: %f' % change
