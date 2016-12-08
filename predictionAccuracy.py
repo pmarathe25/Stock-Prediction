@@ -5,7 +5,7 @@ import dataAnalyzer as da
 from yahoo_finance import Share
 
 def getAccuracy():
-    evaluationSet = ps.parseFile('nasdaqtraded.txt')[0::37]
+    evaluationSet = ps.parseFile('nasdaqtraded.txt')[0::31]
     # evaluationSet = ["TSLA", "BRK.B", "HD", "FB", "AAPL", "ANET", "NVDA", "TXN", "CRM",
     #     "NKE", "LUV", "GE", "TWTR", "MEET", "GOOG", "MSFT", "AMD", "YHOO", "NE",
     #     "BAC"]
