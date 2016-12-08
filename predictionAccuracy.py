@@ -1,31 +1,19 @@
-import stockAnalyzer
+import stockAnalyzer as sa
+import parseStocks as ps
+import dataCollector as dc
+import dataAnalyzer as da
 from yahoo_finance import Share
 
-def getAccuracy(paramList):
-    stocks = ["TSLA", "BRK.B", "HD", "FB", "AAPL", "ANET", "NVDA", "TXN", "CRM",
-        "NKE", "LUV", "GE", "TWTR", "MEET", "GOOG", "MSFT", "AMD", "YHOO", "NE",
-        "BAC"]
-    total = 0
-    correct = 0
-    for stock in stocks:
-        print stock
-        stockActual = Share(stock)
-        actual = stockActual.get_change()
-        probability = stockAnalyzer.growthProbability(stock, paramList)
-        if (actual is not None):
-            print float(actual)
-            print probability
-            actual = float(actual)
-            if (probability >= .5 and actual >= 0):
-                correct += 1
-            elif (probability <= .5 and actual <= 0):
-                correct += 1
-            total += 1
-    print "Correct"
-    print correct
-    print "Total"
-    print total
-    return correct / total
+def getAccuracy():
+    evaluationSet = ps.parseFile('nasdaqtraded.txt')[0::37]
+    # evaluationSet = ["TSLA", "BRK.B", "HD", "FB", "AAPL", "ANET", "NVDA", "TXN", "CRM",
+    #     "NKE", "LUV", "GE", "TWTR", "MEET", "GOOG", "MSFT", "AMD", "YHOO", "NE",
+    #     "BAC"]
+    PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache = dc.loadData(evaluationSet, 1, 6)
+    analyzer = sa.stockAnalyzer('parameterList')
+    predictedList = analyzer.growthProbabilityBatch(PECache, PEGCache, ShortCache, HistoricalCache)
+    correctPercentage = da.getCorrectPercentage(ActualChangeCache, predictedList)
+    return correctPercentage
 
 if __name__ == '__main__':
-    getAccuracy([])
+    print getAccuracy()
