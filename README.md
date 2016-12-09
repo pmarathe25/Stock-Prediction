@@ -6,8 +6,8 @@
 2.  Run `install.sh` with `bash install.sh`
 3.  Run `run.sh` with `bash run.sh`. At this point, a browser should open. If it does
     not, you will need to:
-⋅⋅*.  Run `server.py` with `python server.py`.
-⋅⋅*.  Manually open `harambeinvestments1.html`.
+    1.  Run `server.py` with `python server.py`.
+    2.  Manually open `harambeinvestments1.html`.
 
 ###Other Operating Systems
 
