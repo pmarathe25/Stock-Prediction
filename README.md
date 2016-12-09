@@ -31,9 +31,10 @@ training script with `python trainParams.py`. This can take several hours to run
 since it needs to load data on over a thousand stocks.
 
 The accuracy score is printed every few thousand training iterations. When you
-are satisfied with the (log-scaled) score (a score of 105 represents 100% accuracy - this is
-practically impossible so don't wait around for this to happen), you can press
-`ctrl+C` to end training.
+are satisfied with the (log-scaled) score (where a score of `numStocks / 2` -
+105 for the default script - represents 100% accuracy - this is practically
+impossible so don't wait around for this to happen), you can press `ctrl+C` to 
+end training.
 
 You can run the `predictionAccuracy.py` script (with `python predictionAccuracy.py`
 to get a sense of how accurate the model currently is.
