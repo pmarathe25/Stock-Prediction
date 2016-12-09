@@ -11,8 +11,8 @@ Linux Users
 
  Other Operating Systems
 
- 1. You will need to manually install a few python libraries: 'yahoo-finance',
+1. You will need to manually install a few python libraries: 'yahoo-finance',
     'scipy', 'requests'. For each of these, you run the pip install command like so:
     'sudo pip install yahoo-finance'.
- 2. Run 'server.py' with 'python server.py'
- 3. Open 'harambeinvestments1.html' in a browser.
+2. Run 'server.py' with 'python server.py'
+3. Open 'harambeinvestments1.html' in a browser.
