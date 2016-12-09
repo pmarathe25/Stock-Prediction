@@ -1,5 +1,4 @@
 #!/bin/bash
-BROWSER=$(gconftool -g /desktop/gnome/url-handlers/http/command)
-export BROWSER="${BROWSER//"\"%s\""/}"
+xdg-open harambeinvestments.html
+(lsof -i :8000 | grep python) | grep -v grep | awk '{print $2}' | xargs kill
 python ./server.py &
-sensible-browser harambeinvestments.html
