@@ -1,7 +1,7 @@
 function httpGetAsync(theUrl, callback)
 {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
+    xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
             callback(xmlHttp.responseText);
     }
@@ -22,7 +22,7 @@ function chartTrend(symbol, trend, stockData, dates) {
     });
     var width = 700;
     var height = 500;
-    var margin = [25, 25, 25, 60];
+    var margin = [50, 50, 50, 60];
     var svg = d3.select('#graph-container').append('svg')
                 .attr('class', 'graph')
                 .attr('width', width)
@@ -107,15 +107,14 @@ function chartTrend(symbol, trend, stockData, dates) {
         .attr('d', line(predicted));
 
     svg.append("text")
-        .attr("x", (width / 2))             
+        .attr("x", (width / 2))
         .attr("y", -margin)
-        .attr("text-anchor", "middle")  
-        .style("font-size", "40px") 
-        .text(symbol);
+        .attr("text-anchor", "end")
+        .style("font-size", "40px")
+        .text(symbol.toUpperCase());
 }
 
 function getTrend(query) {
     console.log("starting query for" + query);
     httpGetAsync('http://localhost:8000?' + JSON.stringify({'term': query}), analyze);
 }
-
