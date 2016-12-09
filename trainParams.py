@@ -117,6 +117,16 @@ def getPartialDerivatives(PECache, PEGCache, ShortCache, HistoricalCache, Actual
         partialDerivatives[index] = float(dAS) / float(dm)
     return partialDerivatives
 
+def readParams(self, filename):
+    params = []
+    with open(filename) as f:
+        line = f.readline()
+        for elem in line.split(','):
+            if elem is not None and elem != "":
+                params.append(float(elem))
+    return params
+
+
 def getAccuracy(PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache, initialParamList, analyzer):
     # First, cache all stock data.
     predictedList = analyzer.growthProbabilityTraining(PECache, PEGCache, ShortCache, HistoricalCache, initialParamList)
@@ -124,11 +134,12 @@ def getAccuracy(PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCach
     return accuracyScore
 
 if __name__ == '__main__':
-    trainingSet = ps.parseFile('nasdaqtraded.txt')[0::7]
+    trainingSet = ps.parseFile('nasdaqtraded.txt')[0::40]
     # trainingSet = ["TSLA", "BRK.B", "HD", "FB", "AAPL", "ANET", "NVDA", "TXN", "CRM",
     #     "NKE", "LUV", "GE", "TWTR", "MEET", "GOOG", "MSFT", "AMD", "YHOO", "NE",
     #     "BAC"]
-    initialParamList = [1, -1, 40, 0, 1, 0.15, 2, 2, 0, 1, 0.3, 1, -1, 5, 0, 1, 0.15, -7, 7, 7, 14, 5, 0.4]
+    initialParamList = readParams('parameterList')
+    # initialParamList = [1, -1, 40, 0, 1, 0.15, 2, 2, 0, 1, 0.3, 1, -1, 5, 0, 1, 0.15, -7, 7, 7, 14, 5, 0.4]
     derivativeStepRatio = 0.025
     gradientStepRatio = 0.001
     train(trainingSet, initialParamList, derivativeStepRatio, gradientStepRatio)

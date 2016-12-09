@@ -26,18 +26,21 @@ First, download and unzip this repository.
 3. Open `harambeinvestments1.html` in a browser.
 
 ###Things to Consider
+
 Over time, the accuracy of the model may decrease. If this is the case, run our
 training script with `python trainParams.py`. This can take several hours to run
-since it needs to load data on over a thousand stocks.
+since it needs to load data on over a thousand stocks. For best results, run this
+script after the market closes (4PM EST).
 
 The accuracy score is printed every few thousand training iterations. When you
-are satisfied with the (log-scaled) score (where a score of `numStocks / 2` -
+are satisfied with the (square-root-scaled) score (where a score of `numStocks / 2` -
 105 for the default script - represents 100% accuracy - this is practically
-impossible so don't wait around for this to happen), you can press `ctrl+C` to 
+impossible so don't wait around for this to happen), you can press `ctrl+C` to
 end training.
 
 You can run the `predictionAccuracy.py` script (with `python predictionAccuracy.py`
-to get a sense of how accurate the model currently is.
+to get a sense of how accurate the model currently is. This script provides a percentage
+accuracy. 
 
 Due to API limitations, the app can take a few seconds to load stock data and output
 a prediction. Also, we can only make a limited number of calls to the Google Trends
