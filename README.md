@@ -5,8 +5,9 @@ First, download and unzip this repository.
 ###Linux Users *(may work on Macs too)*
 
 1.  `cd` into the Stock Prediction directory.
-2.  Run `bash install.sh`.
-3.  Run `bash run.sh`. At this point, a browser should open. If it does not,
+2.  Run `chmod +x install.sh run.sh` to ensure both scripts are executable.
+3.  Run `bash install.sh`.
+4.  Run `bash run.sh`. At this point, a browser should open. If it does not,
     you will need to:
     1.  Run `server.py` with `python server.py`.
     2.  Manually open `harambeinvestments1.html`.
