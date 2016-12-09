@@ -33,5 +33,7 @@ You can run the `predictionAccuracy.py` script (with `python predictionAccuracy.
 to get a sense of how accurate the model currently is.
 
 Due to API limitations, the app can take a few seconds to load stock data and output
-a prediction. Finally, once you exit the app (and stop `server.py`), you will
-not be able open it again for a few minutes. This is due to limitations with sockets.
+a prediction.
+
+Finally, due to socket limitations, once you exit the app (and stop `server.py`),
+you will not be able open it again for a few minutes.
