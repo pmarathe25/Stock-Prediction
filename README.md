@@ -16,10 +16,11 @@ First, download and unzip this repository.
 ###Other Operating Systems
 
 1. You will need to manually install a few python libraries: `yahoo-finance`,
-    `scipy`, `requests`. To install these, run:  
+    `scipy`, `requests`, `numpy`. To install these, run:  
     `sudo pip install yahoo-finance`  
     `sudo pip install scipy`  
-    `sudo pip install requests`  
+    `sudo pip install requests`
+    `sudo pip install numpy`  
 2. After you `cd` into the Stock Prediction directory, run `server.py` with
     `python server.py`
 3. Open `harambeinvestments1.html` in a browser.
@@ -38,7 +39,9 @@ You can run the `predictionAccuracy.py` script (with `python predictionAccuracy.
 to get a sense of how accurate the model currently is.
 
 Due to API limitations, the app can take a few seconds to load stock data and output
-a prediction.
+a prediction. Also, we can only make a limited number of calls to the Google Trends
+API in a given time frame. So after a few requests, the app will not be able to
+display data for a few minutes.
 
 Finally, due to socket limitations, once you exit stop `server.py`,
 you will not be able open the app again for a few minutes.
