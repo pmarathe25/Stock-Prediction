@@ -13,11 +13,8 @@
 
 1. You will need to manually install a few python libraries: `yahoo-finance`,
     `scipy`, `requests`. To install these, run:
-
-    `sudo pip install yahoo-finance`\n
-
-    `sudo pip install scipy`
-
-    `sudo pip install requests`
+    `sudo pip install yahoo-finance`  
+    `sudo pip install scipy`  
+    `sudo pip install requests`  
 2. Run `server.py` with `python server.py`
 3. Open `harambeinvestments1.html` in a browser.
