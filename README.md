@@ -14,7 +14,7 @@
 1. You will need to manually install a few python libraries: `yahoo-finance`,
     `scipy`, `requests`. To install these, run:
 
-    `sudo pip install yahoo-finance`
+    `sudo pip install yahoo-finance`\n
 
     `sudo pip install scipy`
 
