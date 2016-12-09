@@ -16,13 +16,13 @@ def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.0
     partialDerivatives = []
     # Load data.
     PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache = dc.loadData(stocks, 1, 6)
-    maxAccuracy = None
     bestParams = []
     # Create stock analyzer object
     analyzer = sa.stockAnalyzer(paramList)
     minAccuracy = -1 * len(stocks)
     newAccuracy = minAccuracy
     oldAccuracy = minAccuracy
+    maxAccuracy = minAccuracy
     iterations = 0
     shuffled = False
     # Train until kerboard interrupt. If the oldAccuracy is better than the
@@ -41,7 +41,7 @@ def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.0
             # Compute new accuracy.
             newAccuracy = getAccuracy(PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache, paramList, analyzer)
             # Check max.
-            if (maxAccuracy is None or newAccuracy > maxAccuracy):
+            if (newAccuracy > maxAccuracy):
                 maxAccuracy = newAccuracy
                 bestParams = paramList[:]
             # Auto-saves
@@ -54,13 +54,9 @@ def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.0
             # Save and shuffle when we are no longer improving.
             if (newAccuracy <= oldAccuracy):
                 # If this local maximum was the highest peak so far, save it.
-                if (oldAccuracy >= maxAccuracy):
+                if (oldAccuracy == maxAccuracy):
                     print "Maximum accuracy score."
                     print maxAccuracy
-                    print "New"
-                    print newAccuracy
-                    print "Old"
-                    print oldAccuracy
                     # Save the best params so far.
                     writeBestParams('parameterList', bestParams)
                 # Reset newAccuracy and oldAccuracy to minAccuracy to prevent cutting exploration short.
@@ -127,7 +123,7 @@ def getAccuracy(PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCach
     return accuracyScore
 
 if __name__ == '__main__':
-    trainingSet = ps.parseFile('nasdaqtraded.txt')[0::500]
+    trainingSet = ps.parseFile('nasdaqtraded.txt')[0::39]
     # trainingSet = ["TSLA", "BRK.B", "HD", "FB", "AAPL", "ANET", "NVDA", "TXN", "CRM",
     #     "NKE", "LUV", "GE", "TWTR", "MEET", "GOOG", "MSFT", "AMD", "YHOO", "NE",
     #     "BAC"]
