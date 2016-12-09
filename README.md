@@ -1,5 +1,7 @@
 #User Guide
 
+First, download and unzip this repository.
+
 ###Linux Users *(may work on Macs too)*
 
 1.  First cd into the Stock Prediction directory.
