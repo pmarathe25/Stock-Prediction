@@ -1,6 +1,6 @@
-User Guide
+#User Guide
 
-Linux Users
+##Linux Users
 
 1.  First cd into the Stock Prediction directory.
 2.  Run 'install.sh' with 'bash install.sh'
@@ -9,7 +9,7 @@ Linux Users
     a.  Run 'server.py' with 'python server.py'.
     b.  Manually open 'harambeinvestments1.html'.
 
- Other Operating Systems
+##Other Operating Systems
 
 1. You will need to manually install a few python libraries: 'yahoo-finance',
     'scipy', 'requests'. For each of these, you run the pip install command like so:
