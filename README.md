@@ -35,5 +35,5 @@ to get a sense of how accurate the model currently is.
 Due to API limitations, the app can take a few seconds to load stock data and output
 a prediction.
 
-Finally, due to socket limitations, once you exit the app (and stop `server.py`),
-you will not be able open it again for a few minutes.
+Finally, due to socket limitations, once you exit stop `server.py`,
+you will not be able open the app again for a few minutes.
