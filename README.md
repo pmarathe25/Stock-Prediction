@@ -11,6 +11,7 @@ First, download and unzip this repository.
     you will need to:
     1.  Run `server.py` with `python server.py`.
     2.  Manually open `harambeinvestments1.html`.
+5. You can use `ctrl+C` to kill the server.
 
 ###Other Operating Systems
 
