@@ -22,10 +22,16 @@
 ###Things to Consider
 Over time, the accuracy of the model may decrease. If this is the case, run our
 training script with `python trainParams.py`. This can take several hours to run
-since it needs to load data on over a thousand stocks. The accuracy score is printed
-every few thousand training iterations. When you are satisfied with the score (a
-score of 600 represents 100% accuracy - this is impossible so don't wait around for
-this to happen), you can press `ctrl+C` to end training.
+since it needs to load data on over a thousand stocks.
+
+The accuracy score is printed every few thousand training iterations. When you
+are satisfied with the score (a score of 600 represents 100% accuracy - this is
+practically impossible so don't wait around for this to happen), you can press
+`ctrl+C` to end training.
 
 You can run the `predictionAccuracy.py` script (with `python predictionAccuracy.py`
 to get a sense of how accurate the model currently is.
+
+Due to API limitations, the app can take a few seconds to load stock data and output
+a prediction. Finally, once you exit the app (and stop `server.py`), you will
+not be able open it again for a few minutes. This is due to limitations with sockets.
