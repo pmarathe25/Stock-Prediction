@@ -20,12 +20,18 @@ def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.0
     bestParams = []
     # Create stock analyzer object
     analyzer = sa.stockAnalyzer(paramList)
-    newAccuracy = 0
-    oldAccuracy = 0
-    # Train until kerboard interrupt. If the oldAccuracy is better than the newAccuracy
-    # , save the best parameters found so far to a file and then randomize the parameterList.
+    minAccuracy = -1 * len(stocks)
+    newAccuracy = minAccuracy
+    oldAccuracy = minAccuracy
+    iterations = 0
+    shuffled = False
+    # Train until kerboard interrupt. If the oldAccuracy is better than the
+    # newAccuracy, save the best parameters found so far to a file and then
+    # randomize the parameterList. Also, every few thousand iterations, save
+    # the best parameters so far.
     try:
         while True:
+            iterations += 1
             # Save old accuracy.
             oldAccuracy = newAccuracy
             # Get partial derivatives.
@@ -38,17 +44,30 @@ def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.0
             if (maxAccuracy is None or newAccuracy > maxAccuracy):
                 maxAccuracy = newAccuracy
                 bestParams = paramList[:]
-            # Save and shuffle when we are no longer improving.
-            if (newAccuracy is not None and oldAccuracy is not None and newAccuracy <= oldAccuracy):
+            # Auto-saves
+            if (iterations == 1200000 / len(stocks)):
+                iterations = 0
                 print "Maximum accuracy score."
                 print maxAccuracy
                 # Save the best params so far.
                 writeBestParams('parameterList', bestParams)
+            # Save and shuffle when we are no longer improving.
+            if (newAccuracy <= oldAccuracy):
+                # If this local maximum was the highest peak so far, save it.
+                if (oldAccuracy >= maxAccuracy):
+                    print "Maximum accuracy score."
+                    print maxAccuracy
+                    print "New"
+                    print newAccuracy
+                    print "Old"
+                    print oldAccuracy
+                    # Save the best params so far.
+                    writeBestParams('parameterList', bestParams)
+                # Reset newAccuracy and oldAccuracy to minAccuracy to prevent cutting exploration short.
+                newAccuracy = minAccuracy
+                oldAccuracy = minAccuracy
                 # Randomize the parameterList
                 paramList = randomizeParamList(bestParams)
-                # Reset accuracy variables.
-                newAccuracy = None
-                oldAccuracy = None
     except KeyboardInterrupt:
         writeBestParams('parameterList', bestParams)
     print
@@ -98,7 +117,7 @@ def getPartialDerivatives(PECache, PEGCache, ShortCache, HistoricalCache, Actual
         newAccuracy = getAccuracy(PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache, tempParamList, analyzer)
         # Compute delta
         dAS = newAccuracy - baseAccuracy
-        partialDerivatives[index] = dAS / dm
+        partialDerivatives[index] = float(dAS) / float(dm)
     return partialDerivatives
 
 def getAccuracy(PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache, initialParamList, analyzer):
@@ -108,7 +127,7 @@ def getAccuracy(PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCach
     return accuracyScore
 
 if __name__ == '__main__':
-    trainingSet = ps.parseFile('nasdaqtraded.txt')[0::39]
+    trainingSet = ps.parseFile('nasdaqtraded.txt')[0::500]
     # trainingSet = ["TSLA", "BRK.B", "HD", "FB", "AAPL", "ANET", "NVDA", "TXN", "CRM",
     #     "NKE", "LUV", "GE", "TWTR", "MEET", "GOOG", "MSFT", "AMD", "YHOO", "NE",
     #     "BAC"]
