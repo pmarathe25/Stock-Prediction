@@ -18,7 +18,8 @@ First, download and unzip this repository.
     `sudo pip install yahoo-finance`  
     `sudo pip install scipy`  
     `sudo pip install requests`  
-2. Run `server.py` with `python server.py`
+2. After you `cd` into the Stock Prediction directory, run `server.py` with
+    `python server.py`
 3. Open `harambeinvestments1.html` in a browser.
 
 ###Things to Consider
