@@ -48,9 +48,7 @@ def getWeekAvgPercentChange(stockName, startDay, endDay):
         stock = Share(stockName)
         x, y, date = getWeekHistoricalData(stockName, startDay, endDay)
         slope, intercept, r_value, p_value, std_err = stats.linregress(x,y)
-        mostRecent = startDay
-        leastRecent = endDay * 2 + 1
-        percentChange = float(y[mostRecent] - y[leastRecent]) / (float(stock.get_price()) * (endDay - startDay)) * 100
+        percentChange = float(slope) / float(stock.get_price()) * 100
         return percentChange
     except:
         return None

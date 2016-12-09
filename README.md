@@ -31,7 +31,7 @@ training script with `python trainParams.py`. This can take several hours to run
 since it needs to load data on over a thousand stocks.
 
 The accuracy score is printed every few thousand training iterations. When you
-are satisfied with the score (a score of 600 represents 100% accuracy - this is
+are satisfied with the (log-scaled) score (a score of 105 represents 100% accuracy - this is
 practically impossible so don't wait around for this to happen), you can press
 `ctrl+C` to end training.
 
