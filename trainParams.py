@@ -24,7 +24,6 @@ def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.0
     oldAccuracy = minAccuracy
     maxAccuracy = minAccuracy
     iterations = 0
-    shuffled = False
     # Train until kerboard interrupt. If the oldAccuracy is better than the
     # newAccuracy, save the best parameters found so far to a file and then
     # randomize the parameterList. Also, every few thousand iterations, save
