@@ -16,7 +16,7 @@ def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.0
     partialDerivatives = []
     # Load data.
     PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache = dc.loadData(stocks, 1, 6)
-    bestParams = []
+    bestParams = paramList
     # Create stock analyzer object
     analyzer = sa.stockAnalyzer(paramList)
     minAccuracy = -1 * len(stocks)
@@ -40,12 +40,12 @@ def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.0
             paramList = gradientAscent(partialDerivatives, paramList, gradientStepRatio)
             # Compute new accuracy.
             newAccuracy = getAccuracy(PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCache, paramList, analyzer)
-            # Check max.
-            if (newAccuracy > maxAccuracy):
-                maxAccuracy = newAccuracy
-                bestParams = paramList[:]
             # Auto-saves
             if (iterations == 1200000 / len(stocks)):
+                # Check max.
+                if (newAccuracy > maxAccuracy):
+                    maxAccuracy = newAccuracy
+                    bestParams = paramList[:]
                 iterations = 0
                 print "Maximum accuracy score."
                 print maxAccuracy
@@ -54,7 +54,9 @@ def train(stocks, paramList, derivativeStepRatio = 0.01, gradientStepRatio = 0.0
             # Save and shuffle when we are no longer improving.
             if (newAccuracy <= oldAccuracy):
                 # If this local maximum was the highest peak so far, save it.
-                if (oldAccuracy == maxAccuracy):
+                if (oldAccuracy > maxAccuracy):
+                    maxAccuracy = oldAccuracy
+                    bestParams = paramList[:]
                     print "Maximum accuracy score."
                     print maxAccuracy
                     # Save the best params so far.
@@ -123,7 +125,7 @@ def getAccuracy(PECache, PEGCache, ShortCache, HistoricalCache, ActualChangeCach
     return accuracyScore
 
 if __name__ == '__main__':
-    trainingSet = ps.parseFile('nasdaqtraded.txt')[0::39]
+    trainingSet = ps.parseFile('nasdaqtraded.txt')[0::7]
     # trainingSet = ["TSLA", "BRK.B", "HD", "FB", "AAPL", "ANET", "NVDA", "TXN", "CRM",
     #     "NKE", "LUV", "GE", "TWTR", "MEET", "GOOG", "MSFT", "AMD", "YHOO", "NE",
     #     "BAC"]
